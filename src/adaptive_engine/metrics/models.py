@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, Float, String, DateTime, func
+from sqlalchemy import Column, DateTime, Float, Integer, String, func
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
+
 
 class LinkMetric(Base):
     __tablename__ = "link_metrics"
@@ -11,6 +12,7 @@ class LinkMetric(Base):
     rtt_ms = Column(Float, nullable=False)
     loss = Column(Float, nullable=False)
     sinr_db = Column(Float, nullable=False)
+
 
 class DecisionLog(Base):
     __tablename__ = "decision_log"

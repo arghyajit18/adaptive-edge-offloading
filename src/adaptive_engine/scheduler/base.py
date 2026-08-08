@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
-from adaptive_engine.api.schemas import OffloadRequest, Decision
+
+from adaptive_engine.api.schemas import Decision, OffloadRequest
+
+
 class Scheduler(ABC):
     @abstractmethod
-    async def schedule(self, req: OffloadRequest) -> Decision:
-        ...
+    async def schedule(self, req: OffloadRequest) -> Decision: ...

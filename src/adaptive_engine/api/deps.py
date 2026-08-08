@@ -1,7 +1,8 @@
 """Shared dependency helpers – breaks the circular import between main & routes."""
-from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
+
+from adaptive_engine.scheduler.always_local import AlwaysLocalScheduler  # fallback
 from adaptive_engine.scheduler.base import Scheduler
-from adaptive_engine.scheduler.always_local import AlwaysLocalScheduler   # fallback
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 # placeholders – filled in main.py during lifespan start‑up
 _sessionmaker: async_sessionmaker[AsyncSession] | None = None

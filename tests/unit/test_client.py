@@ -1,7 +1,7 @@
 import pytest
-from adaptive_engine.client.task_generator import TaskGenerator, run_local_kernel
-from adaptive_engine.client.local_executor import LocalExecutor
 from adaptive_engine.api.schemas import TaskType
+from adaptive_engine.client.local_executor import LocalExecutor
+from adaptive_engine.client.task_generator import TaskGenerator, run_local_kernel
 
 
 def test_generator_yields_requests():
@@ -23,7 +23,13 @@ def test_kernels_run(tt):
 def test_local_executor_returns_numbers():
     exec_ = LocalExecutor()
     from adaptive_engine.api.schemas import OffloadRequest
-    req = OffloadRequest(task_id="t", task_type=TaskType.MATMUL,
-                         input_size_bytes=1024, compute_complexity=100, deadline_ms=100)
+
+    req = OffloadRequest(
+        task_id="t",
+        task_type=TaskType.MATMUL,
+        input_size_bytes=1024,
+        compute_complexity=100,
+        deadline_ms=100,
+    )
     lat, en = exec_.execute(req)
     assert lat > 0 and en > 0

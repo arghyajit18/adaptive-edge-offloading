@@ -1,6 +1,7 @@
-import time, os
+import os
+import time
+
 from adaptive_engine.client.task_generator import run_local_kernel
-from adaptive_engine.api.schemas import TaskType
 from adaptive_engine.config import settings
 
 
@@ -19,7 +20,7 @@ class LocalExecutor:
         elapsed_s = time.perf_counter() - start
         elapsed_ms = elapsed_s * 1_000
         util = min(req.compute_complexity / self._max_complexity, 1.0)
-        power_w = self._base_w + self._dyn_coeff * (self._freq_ghz ** 2) * util
+        power_w = self._base_w + self._dyn_coeff * (self._freq_ghz**2) * util
         energy_j = power_w * elapsed_s
         energy_mj = energy_j * 1_000
         return elapsed_ms, energy_mj

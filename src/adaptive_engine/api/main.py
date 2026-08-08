@@ -1,16 +1,15 @@
 import asyncio
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+
+from adaptive_engine.api import deps  # ← new import
+from adaptive_engine.api.routes import health, offload
 from adaptive_engine.config import settings
 from adaptive_engine.metrics.models import Base
-from adaptive_engine.metrics.store import MetricsStore
 from adaptive_engine.network.link_monitor import LinkMonitor
 from adaptive_engine.network.ns3_wrapper import Ns3Wrapper
-from adaptive_engine.scheduler.base import Scheduler
 from adaptive_engine.scheduler.adaptive import AdaptiveScheduler
-from adaptive_engine.api.routes import health, offload
-from adaptive_engine.api import deps          # ← new import
+from fastapi import FastAPI
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 
 @asynccontextmanager

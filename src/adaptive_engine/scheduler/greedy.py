@@ -1,6 +1,6 @@
-from adaptive_engine.scheduler.base import Scheduler
-from adaptive_engine.api.schemas import OffloadRequest, Decision
+from adaptive_engine.api.schemas import Decision, OffloadRequest
 from adaptive_engine.network.link_monitor import LinkMonitor
+from adaptive_engine.scheduler.base import Scheduler
 
 
 class GreedyScheduler(Scheduler):
@@ -17,8 +17,12 @@ class GreedyScheduler(Scheduler):
         rtt_ms = metric["rtt_ms"]
         loss = metric["loss"]
 
-        local_ms = (req.compute_complexity * req.input_size_bytes) / (self._local_cpu_mhz * 1e6) * 1e3
+        local_ms = (
+            (req.compute_complexity * req.input_size_bytes) / (self._local_cpu_mhz * 1e6) * 1e3
+        )
         upload_ms = (req.input_size_bytes * 8) / (bw_mbps * 1e6) * 1e3 / (1 - loss)
-        edge_compute_ms = (req.compute_complexity * req.input_size_bytes) / (self._edge_cpu_mhz * 1e6) * 1e3
+        edge_compute_ms = (
+            (req.compute_complexity * req.input_size_bytes) / (self._edge_cpu_mhz * 1e6) * 1e3
+        )
         edge_ms = upload_ms + rtt_ms + edge_compute_ms
         return Decision.OFFLOAD if edge_ms < local_ms else Decision.LOCAL

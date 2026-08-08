@@ -1,5 +1,4 @@
 from collections import deque
-from typing import List
 
 
 class MovingAverageForecaster:
@@ -15,8 +14,8 @@ class MovingAverageForecaster:
             return 0.0
         return sum(self._samples) / len(self._samples)
 
-    def recent_mae(self, actual: List[float]) -> float:
+    def recent_mae(self, actual: list[float]) -> float:
         if not actual:
             return float("inf")
         preds = [self.predict() for _ in actual]
-        return sum(abs(p - a) for p, a in zip(preds, actual)) / len(actual)
+        return sum(abs(p - a) for p, a in zip(preds, actual, strict=False)) / len(actual)

@@ -1,11 +1,12 @@
-import pytest
-from adaptive_engine.scheduler.always_local import AlwaysLocalScheduler
-from adaptive_engine.scheduler.always_edge import AlwaysEdgeScheduler
-from adaptive_engine.scheduler.greedy import GreedyScheduler
-from adaptive_engine.scheduler.adaptive import AdaptiveScheduler
-from adaptive_engine.api.schemas import OffloadRequest, Decision
-from adaptive_engine.network.link_monitor import LinkMonitor
 from unittest.mock import MagicMock
+
+import pytest
+from adaptive_engine.api.schemas import Decision, OffloadRequest
+from adaptive_engine.network.link_monitor import LinkMonitor
+from adaptive_engine.scheduler.adaptive import AdaptiveScheduler
+from adaptive_engine.scheduler.always_edge import AlwaysEdgeScheduler
+from adaptive_engine.scheduler.always_local import AlwaysLocalScheduler
+from adaptive_engine.scheduler.greedy import GreedyScheduler
 
 
 @pytest.fixture

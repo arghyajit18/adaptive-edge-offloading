@@ -1,8 +1,8 @@
-from adaptive_engine.scheduler.base import Scheduler
-from adaptive_engine.api.schemas import OffloadRequest, Decision
+from adaptive_engine.api.schemas import Decision, OffloadRequest
+from adaptive_engine.config import settings
 from adaptive_engine.network.link_monitor import LinkMonitor
 from adaptive_engine.prediction.selector import ForecasterSelector
-from adaptive_engine.config import settings
+from adaptive_engine.scheduler.base import Scheduler
 
 
 class AdaptiveScheduler(Scheduler):
@@ -12,8 +12,8 @@ class AdaptiveScheduler(Scheduler):
             window=settings.prediction.window,
             eval_interval=settings.prediction.eval_interval,
         )
-        self._tx_energy_per_mb = 5.0          # mJ per MB transmitted
-        self._cpu_energy_per_cycle = 1e-9     # J per CPU cycle
+        self._tx_energy_per_mb = 5.0  # mJ per MB transmitted
+        self._cpu_energy_per_cycle = 1e-9  # J per CPU cycle
         self._battery_budget_mj = settings.battery.budget_mj
         self._spent_mj = 0.0
         self._local_cpu_hz = 2e9

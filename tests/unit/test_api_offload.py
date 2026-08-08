@@ -1,10 +1,10 @@
 import pytest
-from httpx import AsyncClient, ASGITransport
-from adaptive_engine.api.main import app
-from adaptive_engine.scheduler.always_local import AlwaysLocalScheduler
 from adaptive_engine.api.deps import get_scheduler, get_sessionmaker
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from adaptive_engine.api.main import app
 from adaptive_engine.metrics.models import Base
+from adaptive_engine.scheduler.always_local import AlwaysLocalScheduler
+from httpx import ASGITransport, AsyncClient
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 
 @pytest.fixture(autouse=True)
@@ -19,6 +19,7 @@ def _override_deps():
 
     # run the async table creation once
     import asyncio
+
     asyncio.run(_create_tables())
 
     sessionmaker = async_sessionmaker(engine, expire_on_commit=False)

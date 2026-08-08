@@ -1,6 +1,3 @@
-from typing import List
-
-
 class ExpSmoothingForecaster:
     def __init__(self, alpha: float = 0.3):
         self._alpha = alpha
@@ -15,7 +12,7 @@ class ExpSmoothingForecaster:
     def predict(self) -> float:
         return self._level or 0.0
 
-    def recent_mae(self, actual: List[float]) -> float:
+    def recent_mae(self, actual: list[float]) -> float:
         if not actual:
             return float("inf")
         level = None

@@ -1,6 +1,5 @@
-from adaptive_engine.prediction.moving_average import MovingAverageForecaster
 from adaptive_engine.prediction.exp_smoothing import ExpSmoothingForecaster
-from typing import Dict
+from adaptive_engine.prediction.moving_average import MovingAverageForecaster
 
 
 class ForecasterSelector:
@@ -8,7 +7,7 @@ class ForecasterSelector:
         self._window = window
         self._eval_interval = eval_interval
         self._tick = 0
-        self.forecasters: Dict[str, dict] = {}
+        self.forecasters: dict[str, dict] = {}
 
     def _ensure(self, name: str):
         if name not in self.forecasters:
@@ -28,11 +27,13 @@ class ForecasterSelector:
             self._reevaluate()
 
     def _reevaluate(self) -> None:
-        for name, bag in self.forecasters.items():
+        for _name, bag in self.forecasters.items():
             ma_pred = bag["ma"].predict()
             es_pred = bag["es"].predict()
             last_val = bag["ma"]._samples[-1] if bag["ma"]._samples else 0
-            bag["best"] = bag["ma"] if abs(ma_pred - last_val) < abs(es_pred - last_val) else bag["es"]
+            bag["best"] = (
+                bag["ma"] if abs(ma_pred - last_val) < abs(es_pred - last_val) else bag["es"]
+            )
 
     def predict_all(self) -> dict:
         out = {}
