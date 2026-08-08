@@ -1,0 +1,35 @@
+version: "3.9"
+services:
+  ns3:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.ns3
+    command: "${NS3_BIN}", "--tickMs=100"
+    volumes:
+      - ../config:/app/config:ro
+    restart: unless-stopped
+    stdout: true
+    stderr: true
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports: "8000:8000"
+    depends_on: ns3
+    environment:
+      - NS3_HOST=ns3
+    volumes:
+      - ../config:/app/config:ro
+      - ../data:/app/data
+    restart: unless-stopped
+  dashboard:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    command: "python", "-m", "adaptive_engine.dashboard.app"
+    ports: "8050:8050"
+    depends_on: api
+    volumes:
+      - ../config:/app/config:ro
+      - ../data:/app/data
+    restart: unless-stopped

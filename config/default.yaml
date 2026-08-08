@@ -1,0 +1,60 @@
+------------------------------------------------------------------
+Database (SQLite async – file‑based, good for demos)
+db:
+  url: "sqlite+aiosqlite:///./data/offload.db"
+  echo: false
+------------------------------------------------------------------
+API
+api:
+  host: "0.0.0.0"
+  port: 8000
+------------------------------------------------------------------
+Link monitor persistence rate (seconds)
+link_monitor:
+  store_interval_sec: 1.0
+------------------------------------------------------------------
+ns‑3 (already present from Step 2)
+ns3:
+  binary_path: "/opt/ns-3-dev/build/scratch/ns3_scenario"
+  tick_ms: 100
+  mobility:
+    model: "RandomWaypoint"
+    speed_min: 0.5
+    speed_max: 5.0
+    pause: 1.0
+  channel:
+    fading: "Rayleigh"
+    bandwidth_hz: 100_000_000
+------------------------------------------------------------------
+Prediction
+prediction:
+  window: 20
+  eval_interval: 50
+------------------------------------------------------------------
+Battery budget (millijoules) – demo value
+battery:
+  budget_mj: 5000.0
+------------------------------------------------------------------
+Client workload generator
+client:
+  mix:
+    image: 0.35
+    matmul: 0.35
+    ml_inference: 0.30
+  size_range_bytes: 200_000, 5_000_000
+  complexity_range: 100, 1000
+  deadline_range_ms: 50, 300
+  seed: 42
+  local_executor:
+    base_power_w: 0.5
+    dyn_coeff: 0.02
+    cpu_freq_ghz: 2.0
+    max_complexity: 1000
+------------------------------------------------------------------
+Offline comparison harness
+comparison:
+  num_tasks: 200
+------------------------------------------------------------------
+Dashboard
+dashboard:
+  refresh_interval_sec: 2

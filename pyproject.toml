@@ -1,0 +1,57 @@
+[tool.poetry]
+name = "adaptive-engine"
+version = "0.1.0"
+description = "Adaptive Edge‑Offloading Engine for 5G"
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{include = "adaptive_engine", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.111"
+uvicorn = {extras = ["standard"], version = "^0.30"}
+pydantic = "^2.8"
+pydantic-settings = "^2.3"
+sqlalchemy = {extras = ["asyncio"], version = "^2.0"}
+aiosqlite = "^0.19"
+numpy = "^1.26"
+pandas = "^2.2"
+plotly = "^5.22"
+dash = "^2.17"
+structlog = "^24.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2"
+pytest-asyncio = "^0.23"
+httpx = "^0.27"
+ruff = "^0.5"
+black = "^24.4"
+isort = "^5.13"
+codespell = "^2.3"
+mypy = "^1.10"
+pre-commit = "^3.7"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+select = ["E","F","I","W","UP","B","C4","SIM","T20"]
+ignore = ["S101"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+strict_optional = true
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,25 @@
+#---- Builder stage -------------------------------------------------
+FROM ubuntu:22.04 AS ns3-builder
+ARG NS3_VERSION=ns-3.42
+ARG NS3_5G_COMMIT=5g-nr-2024-06
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        git python3 python3-pip cmake g++ ninja-build \
+        libboost-system-dev libboost-thread-dev libboost-filesystem-dev \
+        libxml2-dev libsqlite3-dev libgsl-dev \
+        qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools \
+        gir1.2-goocanvas-2.0 python3-gi python3-gi-cairo python3-pygraphviz \
+        python3-pip python3-setuptools python3-wheel && \
+    rm -rf /var/lib/apt/lists/*
+WORKDIR /opt
+RUN git clone --depth 1 --branch ${NS3_VERSION} https://gitlab.com/nsnam/ns-3-dev.git ns-3-dev
+WORKDIR /opt/ns-3-dev
+RUN git clone --depth 1 --branch ${NS3_5G_COMMIT} \
+        https://gitlab.com/nsnam/5g-nr.git src/5g-nr
+RUN ./ns3 configure --enable-examples --enable-tests --enable-modules=5g-nr
+RUN ./ns3 build -j$(nproc)
+#---- Runtime stage -------------------------------------------------
+FROM ubuntu:22.04 AS ns3-runtime
+COPY --from=ns3-builder /opt/ns-3-dev/build /opt/ns-3-dev/build
+COPY --from=ns3-builder /opt/ns-3-dev/src/5g-nr /opt/ns-3-dev/src/5g-nr
+ENV NS3_BIN=/opt/ns-3-dev/build/scratch/ns3_scenario
+WORKDIR /app

@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  PYTHON_VERSION: "3.11"
+  POETRY_VERSION: "1.8.3"
+
+jobs:
+  lint-and-typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install Poetry
+        run: pipx install poetry==${{ env.POETRY_VERSION }}
+      - name: Install deps
+        run: poetry install --with dev --no-interaction
+      - name: Ruff (lint)
+        run: poetry run ruff check src tests
+      - name: Black (format check)
+        run: poetry run black --check src tests
+      - name: isort (import order)
+        run: poetry run isort --check-only src tests
+      - name: codespell
+        run: poetry run codespell src tests docs
+      - name: Mypy (type‑check)
+        run: poetry run mypy src
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    needs: lint-and-typecheck
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install Poetry
+        run: pipx install poetry==${{ env.POETRY_VERSION }}
+      - name: Install deps
+        run: poetry install --with dev --no-interaction
+      - name: Run pytest
+        run: poetry run pytest -q --tb=short
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image (api)
+        run: |
+          docker build -f docker/Dockerfile -t ${{ github.repository }}/api:${{ github.sha }} .
+      - name: Build Docker image (ns3)
+        run: |
+          docker build -f docker/Dockerfile.ns3 -t ${{ github.repository }}/ns3:${{ github.sha }} .
+      - name: Build Docker image (dashboard)
+        run: |
+          docker build -f docker/Dockerfile -t ${{ github.repository }}/dashboard:${{ github.sha }} . \
+            --target runtime
