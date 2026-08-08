@@ -33,7 +33,7 @@ flowchart LR
     API --> DB[(SQLite)]
     Sched -->|decision| API
     API -->|response| Client
-    DB --> Dash[Plotly‑Dash]
+    DB --> Dash[Plotly‑Dash]'''
 ⚡ Quick‑Start (Docker)
 # 1️⃣ Clone & enter
 git clone https://github.com/<your‑org>/adaptive-edge-offloading.git
